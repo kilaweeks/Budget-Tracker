@@ -4,24 +4,23 @@ const FILES_TO_CACHE = [
     `/db.js`,
     `/index.js`,
     `/manifest.webmanifest`,
-    `/assets/icons/moneyicon512x512.png`,
-    `/assets/icons/moneyicon192x192.png`,
+    `/assets/icons/icon-512x512.png`,
+    `/assets/icons/icon-192x192.png`,
     `/styles.css`,
   ];
   
   const CACHE_NAME = "static-cache-v2";
   const DATA_CACHE_NAME = "data-cache-v1";
   
-  self.addEventListener("install", function (evt) {
-    evt.waitUntil(
-      caches.open(CACHE_NAME).then((cache) => {
-        console.log("Your files were pre-cached successfully!");
-        return cache.addAll(FILES_TO_CACHE);
-      })
+  self.addEventListener('install', (event) => {
+    event.waitUntil(
+      caches.open(DATA_CACHE_NAME).then((cache) => cache.add('/api/transaction'))
     );
-  
+    event.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
+    );
     self.skipWaiting();
-  });
+  })
   
   self.addEventListener("activate", function (evt) {
     evt.waitUntil(
